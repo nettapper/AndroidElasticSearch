@@ -9,7 +9,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.ssrg.androidelasticsearch.R;
 
@@ -71,7 +73,10 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
-		
+		// You can't access the network from the GUI thread...
+		// So lets create another thread to do that work.
+		// If we try to ust the gui thread w/o a network thread
+		// the gui will block
 		SearchThread thread = new SearchThread("*");
 
 		thread.start();
@@ -101,9 +106,13 @@ public class MainActivity extends Activity {
 		movies.clear();
 
 		// TODO: Extract search query from text view
-		
+		// EditText searchTerm = (EditText) findViewById(R.id.editText1);
+
 		// TODO: Run the search thread
-		
+		// SearchThread thread = new SearchThread(searchTerm.getText().toString());
+		// thread.start();
+
+		new SearchThread(((EditText) findViewById(R.id.editText1)).getText().toString()).start();
 	}
 	
 	/**
